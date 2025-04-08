@@ -8,12 +8,27 @@ type IUserStore interface {
 	CreateUser(User) error
 }
 
+type IPostStore interface {
+	GetPosts() ([]Post, error)
+	GetPostByID(id int) (*Post, error)
+	CreatePost(Post) error
+	// TODO DeletePostByID(id int) error
+}
+
 type User struct {
 	ID        int
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type Post struct {
+	ID        int       `json:"id"`
+	UserID    int       `json:"user_id"`
+	Title     string    `json:"title"`
+	Text      string    `json:"text"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -25,6 +40,16 @@ type RegisterUserPayload struct {
 }
 
 type LoginUserPayload struct {
-	Email     string `json:"email" validate:"required,email"`
-	Password  string `json:"password" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
+type GetFeedPayload struct{}
+
+type GetPostByIDPayload struct{}
+
+type CreatePostPayload struct {
+	UserID 	int 	`json:"user_id" validate:"required"`
+	Title 	string 	`json:"title" validate:"required,min=3,max=30"`
+	Text 	string	`json:"text" validate:"required,min=3,max=100"`
 }
