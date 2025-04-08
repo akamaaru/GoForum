@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS posts (
     `user_id` INT UNSIGNED NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `text` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)

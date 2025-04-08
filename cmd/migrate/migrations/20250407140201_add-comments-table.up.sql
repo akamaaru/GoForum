@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS comments (
     `post_id` INT UNSIGNED NOT NULL,
     `user_id` INT UNSIGNED NOT NULL,
     `text` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (id),
     FOREIGN KEY (post_id) REFERENCES posts(id),
