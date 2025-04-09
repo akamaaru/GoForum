@@ -13,13 +13,13 @@ import (
 )
 
 type Handler struct {
-	store 		types.IPostStore
-	userStore 	types.IUserStore
+	store     types.PostStore
+	userStore types.UserStore
 }
 
-func NewHandler(store types.IPostStore, userStore types.IUserStore) *Handler {
+func NewHandler(store types.PostStore, userStore types.UserStore) *Handler {
 	return &Handler{
-		store: store, 
+		store:     store,
 		userStore: userStore,
 	}
 }
@@ -86,7 +86,7 @@ func (h *Handler) handleGetPostByID(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) handleCreatePost(w http.ResponseWriter, r *http.Request) {
 	userID := auth.GetUserIDFromContext(r.Context())
-	
+
 	var payload types.CreatePostPayload
 	if err := utils.ParseJSON(r, &payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
@@ -101,8 +101,8 @@ func (h *Handler) handleCreatePost(w http.ResponseWriter, r *http.Request) {
 
 	err := h.store.CreatePost(types.Post{
 		UserID: userID,
-		Title: payload.Title,
-		Text: payload.Text,
+		Title:  payload.Title,
+		Text:   payload.Text,
 	})
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)

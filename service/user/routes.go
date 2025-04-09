@@ -13,10 +13,10 @@ import (
 )
 
 type Handler struct {
-	store types.IUserStore
+	store types.UserStore
 }
 
-func NewHandler(store types.IUserStore) *Handler {
+func NewHandler(store types.UserStore) *Handler {
 	return &Handler{store: store}
 }
 
@@ -56,7 +56,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string {"token": token})
+	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -85,10 +85,10 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.store.CreateUser(types.User{
-		FirstName: 	payload.FirstName,
-		LastName: 	payload.LastName,
-		Email: 		payload.Email,
-		Password: 	hashedPassword,
+		FirstName: payload.FirstName,
+		LastName:  payload.LastName,
+		Email:     payload.Email,
+		Password:  hashedPassword,
 	})
 
 	if err != nil {

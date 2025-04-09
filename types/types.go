@@ -2,13 +2,13 @@ package types
 
 import "time"
 
-type IUserStore interface {
+type UserStore interface {
 	GetUserByEmail(email string) (*User, error)
 	GetUserByID(id int) (*User, error)
 	CreateUser(User) error
 }
 
-type IPostStore interface {
+type PostStore interface {
 	GetPosts() ([]Post, error)
 	GetPostByID(id int) (*Post, error)
 	CreatePost(Post) error
@@ -49,6 +49,6 @@ type GetFeedPayload struct{}
 type GetPostByIDPayload struct{}
 
 type CreatePostPayload struct {
-	Title 	string 	`json:"title" validate:"required,min=3,max=30"`
-	Text 	string	`json:"text" validate:"required,min=3,max=100"`
+	Title string `json:"title" validate:"required,min=3,max=30"`
+	Text  string `json:"text" validate:"required,min=3,max=100"`
 }
