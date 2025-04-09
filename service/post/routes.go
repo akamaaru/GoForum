@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/akamaaru/go-forum/service/auth"
 	"github.com/akamaaru/go-forum/types"
 	"github.com/akamaaru/go-forum/utils"
 	"github.com/go-playground/validator"
@@ -12,15 +13,20 @@ import (
 )
 
 type Handler struct {
-	store types.IPostStore
+	store 		types.IPostStore
+	userStore 	types.IUserStore
 }
 
-func NewHandler(store types.IPostStore) *Handler {
-	return &Handler{store: store}
+func NewHandler(store types.IPostStore, userStore types.IUserStore) *Handler {
+	return &Handler{
+		store: store, 
+		userStore: userStore,
+	}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/post", h.handleCreatePost).Methods("POST")
+	router.HandleFunc("/post", auth.WithJWTAuth(h.handleCreatePost, h.userStore)).Methods("POST")
+
 	router.HandleFunc("/feed", h.handleGetFeed).Methods("GET")
 	router.HandleFunc("/post/{id}", h.handleGetPostByID).Methods("GET")
 	// TODO router.HandleFunc("/post/{id}", h.handleDeletePostByID).Methods("DELETE")
@@ -79,6 +85,8 @@ func (h *Handler) handleGetPostByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleCreatePost(w http.ResponseWriter, r *http.Request) {
+	userID := auth.GetUserIDFromContext(r.Context())
+	
 	var payload types.CreatePostPayload
 	if err := utils.ParseJSON(r, &payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
@@ -92,7 +100,7 @@ func (h *Handler) handleCreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := h.store.CreatePost(types.Post{
-		UserID: payload.UserID,
+		UserID: userID,
 		Title: payload.Title,
 		Text: payload.Text,
 	})

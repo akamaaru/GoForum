@@ -31,7 +31,7 @@ func (s *APIServer) Run() error {
 	userHandler.RegisterRoutes(subrouter)
 
 	postStore := post.NewStore(s.db)
-	postHandler := post.NewHandler(postStore)
+	postHandler := post.NewHandler(postStore, userStore)
 	postHandler.RegisterRoutes(subrouter)
 
 	log.Println("Listening server on", s.addr)

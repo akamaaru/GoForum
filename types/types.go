@@ -49,7 +49,6 @@ type GetFeedPayload struct{}
 type GetPostByIDPayload struct{}
 
 type CreatePostPayload struct {
-	UserID 	int 	`json:"user_id" validate:"required"`
 	Title 	string 	`json:"title" validate:"required,min=3,max=30"`
 	Text 	string	`json:"text" validate:"required,min=3,max=100"`
 }
