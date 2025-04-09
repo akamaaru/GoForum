@@ -15,6 +15,12 @@ type PostStore interface {
 	// TODO DeletePostByID(id int) error
 }
 
+type CommentStore interface {
+	GetCommentsByPostID(id int) ([]Comment, error)
+	CreateComment(Comment) error
+	// TODO DeleteCommentByID(id int) error
+}
+
 type User struct {
 	ID        int
 	FirstName string    `json:"first_name"`
@@ -32,6 +38,14 @@ type Post struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+type Comment struct {
+	ID        int       `json:"id"`
+	PostID    int       `json:"post_id"`
+	UserID    int       `json:"user_id"`
+	Text      string    `json:"text"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 type RegisterUserPayload struct {
 	FirstName string `json:"first_name" validate:"required"`
 	LastName  string `json:"last_name" validate:"required"`
@@ -44,11 +58,11 @@ type LoginUserPayload struct {
 	Password string `json:"password" validate:"required"`
 }
 
-type GetFeedPayload struct{}
-
-type GetPostByIDPayload struct{}
-
 type CreatePostPayload struct {
 	Title string `json:"title" validate:"required,min=3,max=30"`
+	Text  string `json:"text" validate:"required,min=3,max=100"`
+}
+
+type CreateCommentPayload struct {
 	Text  string `json:"text" validate:"required,min=3,max=100"`
 }

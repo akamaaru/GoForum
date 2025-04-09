@@ -33,18 +33,6 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleGetFeed(w http.ResponseWriter, r *http.Request) {
-	// var payload types.GetFeedPayload
-	// if err := utils.ParseJSON(r, &payload); err != nil {
-	// 	utils.WriteError(w, http.StatusBadRequest, err)
-	// 	return
-	// }
-
-	// if err := utils.Validate.Struct(payload); err != nil {
-	// 	errors := err.(validator.ValidationErrors)
-	// 	utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", errors))
-	// 	return
-	// }
-
 	posts, err := h.store.GetPosts()
 
 	if err != nil {
@@ -56,18 +44,6 @@ func (h *Handler) handleGetFeed(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleGetPostByID(w http.ResponseWriter, r *http.Request) {
-	// var payload types.GetPostByIDPayload
-	// if err := utils.ParseJSON(r, &payload); err != nil {
-	// 	utils.WriteError(w, http.StatusBadRequest, err)
-	// 	return
-	// }
-
-	// if err := utils.Validate.Struct(payload); err != nil {
-	// 	errors := err.(validator.ValidationErrors)
-	// 	utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", errors))
-	// 	return
-	// }
-
 	rawID := mux.Vars(r)["id"]
 	id, err := strconv.ParseInt(rawID, 10, 64)
 	if err != nil {

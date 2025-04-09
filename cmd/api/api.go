@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/akamaaru/go-forum/service/comment"
 	"github.com/akamaaru/go-forum/service/post"
 	"github.com/akamaaru/go-forum/service/user"
 	"github.com/gorilla/mux"
@@ -33,6 +34,10 @@ func (s *APIServer) Run() error {
 	postStore := post.NewStore(s.db)
 	postHandler := post.NewHandler(postStore, userStore)
 	postHandler.RegisterRoutes(subrouter)
+
+	commentStore := comment.NewStore(s.db)
+	commentHandler := comment.NewHandler(commentStore, userStore)
+	commentHandler.RegisterRoutes(subrouter)
 
 	log.Println("Listening server on", s.addr)
 
